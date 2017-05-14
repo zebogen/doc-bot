@@ -14,7 +14,7 @@ class Recommendation
 
   def generate
     doctors_for_complaint.sort_by do |doc|
-      gender_score = doc.gender && @consultation.gender_preference.downcase == doc.gender ? doctors_for_complaint.length : 0
+      gender_score = doc.gender && @consultation.gender_preference.try(:downcase) == doc.gender ? doctors_for_complaint.length : 0
       gender_score + sort_score(doc, 'doctor-location') + sort_score(doc, 'yelp-ratings') + sort_score(doc, 'experience') + sort_score(doc, 'complications')
     end.last(@size)
   end

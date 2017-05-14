@@ -81,8 +81,8 @@ bot.on('message', (payload, reply) => {
       const doctors = body.recommendations;
       if (doctors) {
         message.text = doctors.reduce((text, doc) => {
-          return `${text}${doc.first_name} ${doc.last_name}.\n${doc.distance.toFixed(2)} miles away\n`
-        }, `These ${doctors.length} providers are in your network and perform procedures related to your issue:\n`)
+          return `${text}\n\n${doc.first_name} ${doc.last_name}.\n${doc.distance.toFixed(2)} miles away`
+        }, `These ${doctors.length} providers are in your network and perform procedures related to your issue:`)
         secondMessage = {
           text: 'Was our information accurate?',
           quick_replies: [
