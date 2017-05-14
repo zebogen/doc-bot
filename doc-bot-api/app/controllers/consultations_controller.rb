@@ -9,4 +9,13 @@ class ConsultationsController < ApplicationController
   def consultation_params
     params.permit(:facebook_id)
   end
+
+
+  def search
+  parameters = { term: params[:term], limit: 16 }
+  render json: Yelp.client.search('San Francisco', parameters)
+end
+end
+
+
 end
