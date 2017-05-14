@@ -32,7 +32,11 @@ bot.on('message', (payload, reply) => {
 
       console.log(JSON.stringify(body));
 
-      message.text = body.text;
+      if (body.status === 422) {
+        message.text = "I'm sorry, I don't recognize that complaint. I only work with knee, hip, and back problems.";
+      } else {
+        message.text = body.text;
+      }
 
       if (body.slug === 'location') {
         message.quick_replies = [
@@ -71,34 +75,6 @@ bot.on('message', (payload, reply) => {
         })
       }
     });
-
-    // if (payload.message.attachments) {
-    //   let location = payload.message.attachments[0].payload;
-    //   console.log(location);
-    //   message = {
-    //     text: 'Do you care about question 1?',
-    //     quick_replies: [
-    //       {
-    //         content_type: "text",
-    //         title: 'Yes',
-    //         payload: JSON.stringify({
-    //           question_id: 1,
-    //           answer: true
-    //         })
-    //       },
-    //       {
-    //         content_type: "text",
-    //         title: 'No',
-    //         payload: JSON.stringify({
-    //           question_id: 1,
-    //           answer: false
-    //         })
-    //       }
-    //     ]
-    //   }
-    // }
-
-
   })
 })
 
