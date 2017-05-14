@@ -13,13 +13,17 @@
 ActiveRecord::Schema.define(version: 20170513203124) do
 
   create_table "answers", force: :cascade do |t|
+    t.integer "consultation_id"
+    t.integer "question_id"
     t.string "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["consultation_id", "question_id"], name: "index_answers_on_consultation_id_and_question_id", unique: true
   end
 
   create_table "consultations", force: :cascade do |t|
-    t.integer "facebook_id", null: false
+    t.string "facebook_id", null: false
+    t.integer "current_sequence_number", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -42,7 +46,10 @@ ActiveRecord::Schema.define(version: 20170513203124) do
   end
 
   create_table "questions", force: :cascade do |t|
+    t.string "slug", null: false
     t.string "text", null: false
+    t.integer "sequence_number", null: false
+    t.string "answer_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
