@@ -8,7 +8,7 @@ class Consultation < ApplicationRecord
   end
 
   def plans
-    Plan.where('name LIKE ?', "%#{answers.includes(:question).where(questions: { slug: 'insurance' }).first.value.downcase}%")
+    Plan.where('LOWER(name) LIKE ?', "%#{answers.includes(:question).where(questions: { slug: 'insurance' }).first.value.downcase}%")
   end
 
   def recommendation_factors

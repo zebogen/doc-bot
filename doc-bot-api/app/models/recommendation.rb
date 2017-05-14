@@ -14,8 +14,8 @@ class Recommendation
 
   def generate
     doctors_for_complaint.sort_by do |doc|
-      gender_score = doc.gender && @consultation.gender_preference == doc.gender ? doctors_for_complaint.length : 0
-      gender_score + sort_score(doc, 'doctor-location') + sort_score(doc, 'yelp-ratings') + sort_score(doc, 'experience')
+      gender_score = doc.gender && @consultation.gender_preference.downcase == doc.gender ? doctors_for_complaint.length : 0
+      gender_score + sort_score(doc, 'doctor-location') + sort_score(doc, 'yelp-ratings') + sort_score(doc, 'experience') + sort_score(doc, 'complications')
     end.last(@size)
   end
 
@@ -30,7 +30,11 @@ class Recommendation
       @consultation.recommendation_factors.each_with_object({}) do |factor, sorted_lists|
         next unless SORT_FUNCTIONS_BY_SLUG.key?(factor)
         sorted_lists[factor] = doctors_for_complaint.sort(&SORT_FUNCTIONS_BY_SLUG[factor])
-      end.compact
+      end.merge(
+        'complications' => doctors_for_complaint.sort do |a, b|
+          b.average_complication_rate <=> a.average_complication_rate
+        end
+      )
     end
   end
 

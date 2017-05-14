@@ -18,8 +18,6 @@ bot.on('message', (payload, reply) => {
   console.log(JSON.stringify(payload))
 
   bot.getProfile(payload.sender.id, (err, profile) => {
-    if (err) throw err
-
     let message = {};
 
     request.post('http://localhost:5001/answers', {
@@ -41,6 +39,21 @@ bot.on('message', (payload, reply) => {
       if (body.slug === 'location') {
         message.quick_replies = [
           { content_type: 'location' }
+        ]
+      }
+
+      if (body.slug === 'provider-gender') {
+        message.quick_replies = [
+          {
+            content_type: 'text',
+            title: 'Male',
+            payload: 'male'
+          },
+          {
+            content_type: 'text',
+            title: 'Female',
+            payload: 'female'
+          }
         ]
       }
 
@@ -77,7 +90,6 @@ bot.on('message', (payload, reply) => {
         reply(message, (err) => {
           if (err) {
             console.log(err);
-            // throw err;
           }
         })
       }
