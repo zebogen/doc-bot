@@ -7,6 +7,9 @@ class Answer < ApplicationRecord
   YES_ANSWER = 'Yes'
   NO_ANSWER = 'No'
 
+  scope :yes, -> { where(value: YES_ANSWER) }
+  scope :no, -> { where(value: NO_ANSWER) }
+
   validate :complaint_must_match_procedures
 
   def to_procedure_keyword
