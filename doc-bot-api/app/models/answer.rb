@@ -4,10 +4,25 @@ class Answer < ApplicationRecord
 
   VALID_PROCEDURE_REGEXP = /knee|spine|hip|back/
 
-  TRUE_ANSWER = 'Yes'
-  FALSE_ANSWER = 'No'
+  YES_ANSWER = 'Yes'
+  NO_ANSWER = 'No'
 
   validate :complaint_must_match_procedures
+
+  def to_procedure_keyword
+    value.downcase.match(VALID_PROCEDURE_REGEXP)[0]
+  end
+
+  def matching_procedures
+    case to_procedure_keyword
+    when 'knee'
+      Procedure.where(description: 'Knee Replacement')
+    when 'hip'
+      Procedure.where(description: 'Hip Replacement')
+    else
+      Procedure.where.not(description: ['Knee Replacement', 'Hip Replacement'])
+    end
+  end
 
   private
 
