@@ -59,6 +59,13 @@ bot.on('message', (payload, reply) => {
         ]
       }
 
+      const doctors = body.recommendations;
+      if (doctors) {
+        message.text = doctors.reduce((text, doc) => {
+          return `${text}${doc.first_name} ${doc.last_name}.\n${doc.distance.toFixed(2)} miles away\n`
+        }, `These ${doctors.length} providers are in your network and perform procedures related to your issue:\n`)
+      }
+
       console.log('sending message: ' + JSON.stringify(message))
       if (body.sequence_number == 1) {
         reply({
