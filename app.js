@@ -20,9 +20,8 @@ bot.on('message', (payload, reply) => {
   bot.getProfile(payload.sender.id, (err, profile) => {
     if (err) throw err
 
-    let message;
+    let message = {};
 
-    // create consultation and get first question
     request.post('http://localhost:5001/answers', {
       json: true,
       body: { facebook_id: payload.sender.id, value: payload.message.text }
@@ -33,9 +32,29 @@ bot.on('message', (payload, reply) => {
 
       console.log(JSON.stringify(body));
 
-      message = {
-        text: body.text
+      message.text = body.text;
+
+      if (body.slug === 'location') {
+        message.quick_replies = [
+          { content_type: 'location' }
+        ]
       }
+
+      if (body.answer_type === 'boolean') {
+        message.quick_replies = [
+          {
+            content_type: 'text',
+            title: 'Yes',
+            payload: 'true'
+          },
+          {
+            content_type: 'text',
+            title: 'No',
+            payload: 'false'
+          }
+        ]
+      }
+
       console.log('sending message: ' + JSON.stringify(message))
       if (body.sequence_number == 1) {
         reply({
