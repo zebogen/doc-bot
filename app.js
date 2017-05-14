@@ -19,6 +19,7 @@ bot.on('message', (payload, reply) => {
 
   bot.getProfile(payload.sender.id, (err, profile) => {
     let message = {};
+    let secondMessage;
 
     request.post('http://localhost:5001/answers', {
       json: true,
@@ -34,6 +35,11 @@ bot.on('message', (payload, reply) => {
         message.text = "I'm sorry, I don't recognize that complaint. I only work with knee, hip, and back problems.";
       } else {
         message.text = body.text;
+      }
+
+      if (body.sequence_number == 1) {
+        message.text = `Hello, ${profile.first_name}, I’m DocBot. Let’s find you a doctor!`;
+        secondMessage = { text: body.text };
       }
 
       if (body.slug === 'location') {
@@ -77,22 +83,29 @@ bot.on('message', (payload, reply) => {
         message.text = doctors.reduce((text, doc) => {
           return `${text}${doc.first_name} ${doc.last_name}.\n${doc.distance.toFixed(2)} miles away\n`
         }, `These ${doctors.length} providers are in your network and perform procedures related to your issue:\n`)
+        secondMessage = {
+          text: 'Was our information accurate?',
+          quick_replies: [
+            {
+              content_type: 'text',
+              title: 'Yes',
+              payload: 'true'
+            },
+            {
+              content_type: 'text',
+              title: 'No',
+              payload: 'false'
+            }
+          ]
+        }
       }
 
       console.log('sending message: ' + JSON.stringify(message))
-      if (body.sequence_number == 1) {
-        reply({
-          text: `Hello, ${profile.first_name}, I’m DocBot. Let’s find you a doctor!`,
-        }, () => {
-          reply(message);
-        });
-      } else {
-        reply(message, (err) => {
-          if (err) {
-            console.log(err);
-          }
-        })
-      }
+      reply(message, () => {
+        if (secondMessage) {
+          reply(secondMessage);
+        }
+      });
     });
   })
 })
