@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "messenger-bot": "^2.4.0"
+    "messenger-bot": "^2.4.0",
+    "yelp-fusion": "^1.0.3"
   }
 }
