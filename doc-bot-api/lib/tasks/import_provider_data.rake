@@ -5,7 +5,7 @@ task import_provider_data: :environment do
   insurer_count = 0
   plan_count = 0
   row_count = 0
-  CSV.foreach('db/provider_info.csv', headers: true) do |row|
+  CSV.foreach('db/data_files/provider_info.csv', headers: true) do |row|
     doctor = Doctor.find_or_create_by!(npi: row['npi']) do |doc|
       %w(
         distance
@@ -62,4 +62,11 @@ task import_provider_data: :environment do
     row_count += 1
     puts "Processed #{row_count} rows..."
   end
+  puts "Created:"
+  puts "=========================="
+  puts "#{doctor_count} doctors"
+  puts "#{specialization_count} specializations"
+  puts "#{procedure_count} procedures"
+  puts "#{insurer_count} insurers"
+  puts "#{plan_count} plans"
 end

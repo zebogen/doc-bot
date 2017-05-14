@@ -23,5 +23,4 @@ node_modules
 
 doc-bot-api/.env*
 doc-bot-api/tmp/*
-doc-bot-api/db/provider_info.csv
-doc-bot-api/db/yelp_ratings.csv
+doc-bot-api/db/data_files/*

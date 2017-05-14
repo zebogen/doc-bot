@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170514024818) do
+ActiveRecord::Schema.define(version: 20170514034612) do
 
   create_table "answers", force: :cascade do |t|
     t.integer "consultation_id"
@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 20170514024818) do
     t.string "last_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "yelp_rating"
   end
 
   create_table "insurers", force: :cascade do |t|
