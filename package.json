@@ -10,6 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "messenger-bot": "^2.4.0",
+<<<<<<< HEAD
     "yelp-fusion": "^1.0.3"
+=======
+    "request": "^2.81.0"
+>>>>>>> 4998385aa5ad686cad2c479bed53f59332c18654
   }
 }
