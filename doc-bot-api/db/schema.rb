@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170513203124) do
+ActiveRecord::Schema.define(version: 20170514024818) do
 
   create_table "answers", force: :cascade do |t|
     t.integer "consultation_id"
@@ -24,6 +24,47 @@ ActiveRecord::Schema.define(version: 20170513203124) do
   create_table "consultations", force: :cascade do |t|
     t.string "facebook_id", null: false
     t.integer "current_sequence_number", default: 1, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "doctor_plans", force: :cascade do |t|
+    t.integer "doctor_id", null: false
+    t.integer "plan_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "doctor_procedures", force: :cascade do |t|
+    t.integer "doctor_id", null: false
+    t.integer "procedure_id", null: false
+    t.integer "count"
+    t.float "complication_rate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "doctor_specializations", force: :cascade do |t|
+    t.integer "doctor_id", null: false
+    t.integer "specialization_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "doctors", force: :cascade do |t|
+    t.float "distance"
+    t.string "city"
+    t.string "state"
+    t.string "street"
+    t.string "zip"
+    t.string "street2"
+    t.string "phone"
+    t.string "npi", null: false
+    t.string "gender"
+    t.string "yelp_id"
+    t.integer "last_degree_year"
+    t.string "first_name"
+    t.string "last_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -45,11 +86,27 @@ ActiveRecord::Schema.define(version: 20170513203124) do
     t.index ["uid"], name: "index_plans_on_uid"
   end
 
+  create_table "procedures", force: :cascade do |t|
+    t.string "code", null: false
+    t.string "description", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "questions", force: :cascade do |t|
     t.string "slug", null: false
     t.string "text", null: false
     t.integer "sequence_number", null: false
     t.string "answer_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "specializations", force: :cascade do |t|
+    t.string "uid", null: false
+    t.string "name"
+    t.string "description"
+    t.string "practitioner_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
