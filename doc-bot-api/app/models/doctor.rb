@@ -7,4 +7,8 @@ class Doctor < ApplicationRecord
 
   has_many :doctor_plans
   has_many :plans, through: :doctor_plans
+
+  def average_complication_rate
+    doctor_procedures.average(:complication_rate)
+  end
 end

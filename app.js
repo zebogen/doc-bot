@@ -18,8 +18,6 @@ bot.on('message', (payload, reply) => {
   console.log(JSON.stringify(payload))
 
   bot.getProfile(payload.sender.id, (err, profile) => {
-    if (err) throw err
-
     let message = {};
 
     request.post('http://localhost:5001/answers', {
@@ -32,11 +30,30 @@ bot.on('message', (payload, reply) => {
 
       console.log(JSON.stringify(body));
 
-      message.text = body.text;
+      if (body.status === 422) {
+        message.text = "I'm sorry, I don't recognize that complaint. I only work with knee, hip, and back problems.";
+      } else {
+        message.text = body.text;
+      }
 
       if (body.slug === 'location') {
         message.quick_replies = [
           { content_type: 'location' }
+        ]
+      }
+
+      if (body.slug === 'provider-gender') {
+        message.quick_replies = [
+          {
+            content_type: 'text',
+            title: 'Male',
+            payload: 'male'
+          },
+          {
+            content_type: 'text',
+            title: 'Female',
+            payload: 'female'
+          }
         ]
       }
 
@@ -55,6 +72,13 @@ bot.on('message', (payload, reply) => {
         ]
       }
 
+      const doctors = body.recommendations;
+      if (doctors) {
+        message.text = doctors.reduce((text, doc) => {
+          return `${text}${doc.first_name} ${doc.last_name}.\n${doc.distance.toFixed(2)} miles away\n`
+        }, `These ${doctors.length} providers are in your network and perform procedures related to your issue:\n`)
+      }
+
       console.log('sending message: ' + JSON.stringify(message))
       if (body.sequence_number == 1) {
         reply({
@@ -66,39 +90,10 @@ bot.on('message', (payload, reply) => {
         reply(message, (err) => {
           if (err) {
             console.log(err);
-            // throw err;
           }
         })
       }
     });
-
-    // if (payload.message.attachments) {
-    //   let location = payload.message.attachments[0].payload;
-    //   console.log(location);
-    //   message = {
-    //     text: 'Do you care about question 1?',
-    //     quick_replies: [
-    //       {
-    //         content_type: "text",
-    //         title: 'Yes',
-    //         payload: JSON.stringify({
-    //           question_id: 1,
-    //           answer: true
-    //         })
-    //       },
-    //       {
-    //         content_type: "text",
-    //         title: 'No',
-    //         payload: JSON.stringify({
-    //           question_id: 1,
-    //           answer: false
-    //         })
-    //       }
-    //     ]
-    //   }
-    // }
-
-
   })
 })
 
